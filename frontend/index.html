@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sortify — Algorithm Learning Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<div id="app">
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE 1: LANDING
+     ══════════════════════════════════════════════════════════ -->
+<div id="page-landing" class="page active">
+  <div class="landing-logo">Sort<span>ify</span></div>
+  <div class="landing-tag">Algorithm Learning Platform</div>
+  <h1 class="landing-headline">Master <span>Data Structures</span><br>&amp; Algorithms Visually</h1>
+  <p class="landing-sub">Step through sorting algorithms and tree structures with interactive visualizations, quizzes, XP, and badges.</p>
+  <div class="landing-btns">
+    <button class="btn btn-primary btn-lg" onclick="goToAuth('login')">🚀 Get Started</button>
+    <button class="btn btn-white btn-lg"   onclick="startGuest()">👁 Try as Guest</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE 2: AUTH
+     ══════════════════════════════════════════════════════════ -->
+<div id="page-auth" class="page">
+  <!-- Left panel -->
+  <div class="auth-left">
+    <div class="auth-left-logo">Sort<span>ify</span></div>
+    <div class="auth-left-tag">Algorithm Learning Platform</div>
+    <h2 class="auth-headline">Learn Algorithms</h2>
+    <div class="auth-headline-accent">Visually</div>
+    <p class="auth-desc">Step through sorting &amp; tree algorithms one operation at a time. Track your progress, earn badges, and master DSA concepts.</p>
+    <div class="auth-features">
+      <div class="auth-feat"><div class="auth-feat-icon">📊</div><div class="auth-feat-text">Step-by-step visualizations with code highlighting</div></div>
+      <div class="auth-feat"><div class="auth-feat-icon">🌳</div><div class="auth-feat-text">Red-Black, B-Tree, 2–3 Tree &amp; KD-Tree</div></div>
+      <div class="auth-feat"><div class="auth-feat-icon">🏆</div><div class="auth-feat-text">XP system, badges &amp; level progression</div></div>
+      <div class="auth-feat"><div class="auth-feat-icon">🔄</div><div class="auth-feat-text">Resume exactly where you left off</div></div>
+    </div>
+    <div class="auth-badge-cards" style="margin-top:28px">
+      <div class="auth-badge-card">
+        <div class="auth-badge-card-icon">🫧</div>
+        <div><div class="auth-badge-card-name">Bubble Sort Beginner</div><div class="auth-badge-card-sub">Badge earned</div></div>
+        <div class="auth-badge-card-xp">+20 XP</div>
+      </div>
+      <div class="auth-badge-card">
+        <div class="auth-badge-card-icon">🌳</div>
+        <div><div class="auth-badge-card-name">Tree Climber</div><div class="auth-badge-card-sub">Badge earned</div></div>
+        <div class="auth-badge-card-xp">+15 XP</div>
+      </div>
+    </div>
+    <div style="margin-top:20px">
+      <a onclick="goToAuth('landing')" style="font-size:13px;color:rgba(255,255,255,.4);cursor:pointer">← Back to home</a>
+    </div>
+  </div>
+  <!-- Right panel: Form -->
+  <div class="auth-right">
+    <div class="auth-form-wrap">
+      <div class="auth-form-title" id="auth-form-title">Welcome back</div>
+      <div class="auth-form-sub"   id="auth-form-sub">Sign in to continue your learning journey</div>
+      <div class="auth-tab-row">
+        <button class="auth-tab-btn active" id="tab-login"    onclick="switchAuthTab('login')">Login</button>
+        <button class="auth-tab-btn"        id="tab-register" onclick="switchAuthTab('register')">Register</button>
+      </div>
+      <!-- LOGIN -->
+      <div id="auth-login-panel">
+        <div class="form-field">
+          <label class="form-label">Username</label>
+          <input class="form-input" id="l-user" type="text" placeholder="your_username" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Password</label>
+          <input class="form-input" id="l-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <div class="form-error" id="login-err"></div>
+        <button class="btn btn-primary btn-full" id="login-btn" onclick="doLogin()" style="margin-top:4px">Sign In</button>
+      </div>
+      <!-- REGISTER -->
+      <div id="auth-reg-panel" style="display:none">
+        <div class="form-field">
+          <label class="form-label">Display Name</label>
+          <input class="form-input" id="r-display" type="text" placeholder="Your Name">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Username</label>
+          <input class="form-input" id="r-user" type="text" placeholder="unique_username" onkeydown="if(event.key==='Enter')doRegister()">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Password</label>
+          <input class="form-input" id="r-pass" type="password" placeholder="Min 4 characters" onkeydown="if(event.key==='Enter')doRegister()">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Confirm Password</label>
+          <input class="form-input" id="r-confirm" type="password" placeholder="Re-enter password" onkeydown="if(event.key==='Enter')doRegister()">
+        </div>
+        <div class="form-error" id="reg-err"></div>
+        <button class="btn btn-primary btn-full" id="reg-btn" onclick="doRegister()" style="margin-top:4px">Create Account</button>
+      </div>
+      <div class="auth-divider"><div class="auth-divider-line"></div><div class="auth-divider-text">or</div><div class="auth-divider-line"></div></div>
+      <button class="btn btn-ghost btn-full" onclick="startGuest()" style="margin-bottom:8px">Continue as Guest (no progress saved)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE 3: APP (Sidebar + Inner views)
+     ══════════════════════════════════════════════════════════ -->
+<div id="page-app" class="page">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-glow"></div>
+      <div class="sb-logo-inner">
+        <div class="sb-logo-row">
+          <div class="sb-logo-mark">⚡</div>
+          <div class="sb-logo-wordmark">
+            <div class="sb-logo-name">Sort<span>ify</span></div>
+            <div class="sb-logo-tagline">Algorithm Learning</div>
+          </div>
+        </div>
+      </div>
+      <div class="sb-logo-divider"></div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-section-label">Main</div>
+      <div class="sb-item active" id="sb-dashboard" onclick="showView('dashboard')"><span class="sb-icon">🏠</span>Dashboard</div>
+      <div class="sb-item"        id="sb-simulator" onclick="showView('simulator')"><span class="sb-icon">⚡</span>Visualizer</div>
+      <div class="sb-item"        id="sb-trees"     onclick="showView('trees')">    <span class="sb-icon">🌳</span>Trees</div>
+      <div class="sb-item"        id="sb-compare"   onclick="showView('compare')">  <span class="sb-icon">⚖️</span>Compare</div>
+      <div class="sb-section-label">Learn</div>
+      <div class="sb-item"        id="sb-quiz"      onclick="showView('quiz')">     <span class="sb-icon">🧠</span>Quiz</div>
+      <div class="sb-item"        id="sb-progress"  onclick="showView('progress')"> <span class="sb-icon">📈</span>My Progress</div>
+      <div class="sb-section-label">Account</div>
+      <div class="sb-item"        id="sb-logout"    onclick="doLogout()">           <span class="sb-icon">🚪</span>Logout</div>
+    </div>
+    <div class="sb-footer">
+      <div class="sb-user-card" onclick="showView('progress')">
+        <div class="sb-avatar" id="sb-av" style="background:var(--accent)">G</div>
+        <div class="sb-user-info">
+          <div class="sb-user-name" id="sb-nm">Guest</div>
+          <div class="sb-user-level" id="sb-lv">Level 1 • Beginner</div>
+        </div>
+      </div>
+      <div class="sb-xp-wrap">
+        <div class="sb-xp-labels">
+          <span id="sb-xp-cur">0 XP</span>
+          <span id="sb-xp-nxt"></span>
+        </div>
+        <div class="sb-xp-bar"><div class="sb-xp-fill" id="sb-xp" style="width:0%"></div></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN AREA -->
+  <div class="main-wrap">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-actions">
+        <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()"></button>
+        <div class="tb-user" onclick="showView('progress')">
+          <div class="tb-avatar" id="tb-av" style="background:var(--accent)">?</div>
+          <span style="font-size:13px;font-weight:600" id="tb-nm">Guest</span>
+          <span style="font-size:12px;color:var(--text-2);margin-left:4px" id="tb-xp">0 XP</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- INNER VIEWS -->
+    <div class="views-wrap">
+
+      <!-- ── VIEW: DASHBOARD ──────────────────────────────── -->
+      <div id="view-dashboard" class="view active">
+        <!-- Hero -->
+        <div class="hero-banner">
+          <div class="hero-text">
+            <div class="hero-greeting" id="hero-greeting">Hello, Guest 👋</div>
+            <div class="hero-sub">Resume where you left off. Learn and practice algorithms with interactive visualizations and real-time feedback.</div>
+            <div class="hero-btns">
+              <button class="btn btn-white" onclick="showView('simulator')">▶ Start Learning</button>
+              <button class="btn btn-white" id="resume-btn" onclick="resumeSession()" style="display:none">↩ Resume Session</button>
+            </div>
+          </div>
+          <div class="mini-bar-chart">
+            <div class="mini-bar" style="height:30%"></div><div class="mini-bar a" style="height:60%"></div>
+            <div class="mini-bar" style="height:45%"></div><div class="mini-bar p" style="height:80%"></div>
+            <div class="mini-bar" style="height:35%"></div><div class="mini-bar a" style="height:70%"></div>
+            <div class="mini-bar p" style="height:90%"></div>
+          </div>
+        </div>
+        <!-- Stats -->
+        <div class="stat-grid-4">
+          <div class="stat-card"><div class="stat-card-icon">🔄</div><div class="stat-card-val" id="d-comps">0</div><div class="stat-card-label">Total Comparisons</div></div>
+          <div class="stat-card"><div class="stat-card-icon">↔️</div><div class="stat-card-val" id="d-swaps">0</div><div class="stat-card-label">Total Swaps</div></div>
+          <div class="stat-card"><div class="stat-card-icon">📚</div><div class="stat-card-val" id="d-algos">0</div><div class="stat-card-label">Algorithms Practiced</div></div>
+          <div class="stat-card"><div class="stat-card-icon">✅</div><div class="stat-card-val" id="d-acc">0%</div><div class="stat-card-label">Quiz Accuracy</div></div>
+        </div>
+        <!-- Two col -->
+        <div class="two-col">
+          <div class="card card-pad">
+            <div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:14px">Algorithm Progress</div>
+            <div class="prog-list" id="d-algo-prog"><div style="color:var(--text-3);font-size:13px">Start visualizing to see progress!</div></div>
+          </div>
+          <div class="card card-pad">
+            <div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:14px">Recent Activity</div>
+            <div class="act-list" id="d-activity"><div style="color:var(--text-3);font-size:13px">No activity yet. Start learning!</div></div>
+          </div>
+        </div>
+        <!-- Badges -->
+        <div class="card card-pad" style="margin-top:16px">
+          <div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:14px">Badges Earned</div>
+          <div class="badge-wrap" id="d-badges"><div style="color:var(--text-3);font-size:13px">Complete activities to earn badges!</div></div>
+        </div>
+      </div><!-- /view-dashboard -->
+
+      <!-- ── VIEW: SIMULATOR ──────────────────────────────── -->
+      <div id="view-simulator" class="view">
+        <div class="sec-header">
+          <div><div class="sec-title">Sorting Visualizer</div><div class="sec-sub">Step through algorithms one operation at a time</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="saveSession()">💾 Save Session</button>
+        </div>
+        <div class="three-col-sim">
+          <!-- Left controls -->
+          <div class="sim-panel">
+            <div>
+              <div class="sim-label">Algorithm</div>
+              <select class="styled-select" id="algo-sel" onchange="onAlgoChange()">
+                <option>Bubble Sort</option><option>Selection Sort</option><option>Insertion Sort</option>
+                <option>Merge Sort</option><option>Quick Sort</option><option>Heap Sort</option><option>Shell Sort</option>
+              </select>
+            </div>
+            <div>
+              <div class="sim-label">Array Size</div>
+              <select class="styled-select" id="size-sel">
+                <option>4</option><option>5</option><option>6</option><option selected>8</option><option>10</option><option>12</option>
+              </select>
+            </div>
+            <div>
+              <div class="sim-label">Language</div>
+              <select class="styled-select" id="lang-sel" onchange="onLangChange()">
+                <option value="python">Python</option><option value="cpp">C++</option>
+                <option value="java">Java</option><option value="javascript">JavaScript</option>
+              </select>
+            </div>
+            <div>
+              <div class="sim-label">Custom Values</div>
+              <input class="arr-input" id="arr-custom" type="text" placeholder="e.g. 5,3,8,1,9,2">
+            </div>
+            <div>
+              <div class="sim-label">Speed</div>
+              <div class="speed-row">
+                <input type="range" class="speed-slider" id="spd" min="1" max="10" value="5" oninput="document.getElementById('spd-val').textContent=this.value">
+                <span class="speed-val" id="spd-val">5</span>
+              </div>
+            </div>
+            <div class="sim-btn-row">
+              <button class="sim-btn setup"  onclick="doSetup()">⚙ Setup</button>
+              <button class="sim-btn reset"  onclick="doReset()">↺ Reset</button>
+            </div>
+            <div class="sim-btn-row">
+              <button class="sim-btn next"  id="next-btn" onclick="doNext()" disabled>Next ›</button>
+              <button class="sim-btn auto"  id="auto-btn" onclick="doAuto()" disabled>▶ Auto</button>
+            </div>
+            <button class="sim-btn pause" id="pause-btn" onclick="doPause()" disabled style="display:none;width:100%">⏸ Pause</button>
+            <div class="divider" style="margin:4px 0"></div>
+            <div class="sim-label">Complexity</div>
+            <table class="cx-table"><tbody id="sim-cx"></tbody></table>
+            <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap" id="sim-chips"></div>
+          </div>
+
+          <!-- Center -->
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="sim-prog-wrap" style="flex:1"><div class="sim-prog-fill" id="prog-bar" style="width:0%"></div></div>
+              <span style="font-size:11px;color:var(--text-3);white-space:nowrap" id="prog-txt">0 / 0</span>
+              <span style="font-size:11px;padding:3px 9px;background:var(--bg);border-radius:6px;color:var(--text-3)" id="sim-status">Idle</span>
+            </div>
+            <div class="arr-viz">
+              <div class="arr-viz-title"><span>Array Visualization</span></div>
+              <div class="arr-display">
+                <div class="arr-boxes-wrap">
+                  <div class="arr-boxes" id="arr-boxes"></div>
+                  <div class="arr-idx-row" id="arr-idx"></div>
+                  <div class="arr-ptr-row" id="arr-ptrs"></div>
+                </div>
+              </div>
+              <div class="sim-stats-row">
+                <div class="sim-stat"><div class="sim-stat-val" id="s-comps">0</div><div class="sim-stat-lbl">Comparisons</div></div>
+                <div class="sim-stat"><div class="sim-stat-val" id="s-swaps">0</div><div class="sim-stat-lbl">Swaps</div></div>
+                <div class="sim-stat"><div class="sim-stat-val" id="s-step">0</div><div class="sim-stat-lbl">Step</div></div>
+                <div class="sim-stat"><div class="sim-stat-val" id="s-total">—</div><div class="sim-stat-lbl">Total</div></div>
+              </div>
+              <div class="step-msg" id="step-msg">Ready — click Setup to begin</div>
+            </div>
+            <div class="code-panel-wrap">
+              <div class="code-tabs">
+                <div class="code-tab active" id="ctab-code"    onclick="switchCodeTab('code',this)">Code</div>
+                <div class="code-tab"        id="ctab-pseudo"  onclick="switchCodeTab('pseudo',this)">Pseudocode</div>
+                <div class="code-tab"        id="ctab-explain" onclick="switchCodeTab('explain',this)">Explanation</div>
+              </div>
+              <div id="ct-code">  <div class="code-block"   id="code-block"></div></div>
+              <div id="ct-pseudo" style="display:none"><div class="pseudo-block" id="pseudo-block"></div></div>
+              <div id="ct-explain" style="display:none">
+                <div class="explain-block">
+                  <div style="font-size:13.5px;font-weight:700;margin-bottom:7px" id="ex-title"></div>
+                  <div style="font-size:13px;color:var(--text-2);line-height:1.7;margin-bottom:12px" id="ex-how"></div>
+                  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:6px">Use Cases</div>
+                  <ul id="ex-uses" style="padding-left:16px;font-size:13px;color:var(--text-2);line-height:2"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right panel -->
+          <div class="right-panel">
+            <div class="card card-pad">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:10px">Legend</div>
+              <div class="legend-grid">
+                <div class="legend-row"><div class="legend-sw" style="background:#dbeafe;border-color:#1d4ed8"></div>Left Pointer (i)</div>
+                <div class="legend-row"><div class="legend-sw" style="background:#fee2e2;border-color:#dc2626"></div>Right Pointer (j)</div>
+                <div class="legend-row"><div class="legend-sw" style="background:#ede9fe;border-color:#7c3aed"></div>Pivot Element</div>
+                <div class="legend-row"><div class="legend-sw" style="background:#ffe4d0;border-color:#f97316"></div>Swapping</div>
+                <div class="legend-row"><div class="legend-sw" style="background:#dcfce7;border-color:#16a34a"></div>Sorted</div>
+                <div class="legend-row"><div class="legend-sw" style="background:#fef3c7;border-color:#d97706"></div>Comparing</div>
+              </div>
+            </div>
+            <div class="card card-pad">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:10px">Stats Detail</div>
+              <div style="font-size:13px;font-weight:700;margin-bottom:3px" id="m-algo">Bubble Sort</div>
+              <div style="font-size:11.5px;color:var(--text-3);margin-bottom:10px" id="m-step">Step —</div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-2)">Comparisons</span><strong id="m-c">0</strong></div>
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-2)">Swaps</span><strong id="m-s">0</strong></div>
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-2)">Time Complexity</span><strong id="m-t">O(n²)</strong></div>
+              </div>
+            </div>
+            <div class="card card-pad">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:10px">Observations</div>
+              <ul class="obs-list" id="obs-list"></ul>
+            </div>
+          </div>
+        </div>
+      </div><!-- /view-simulator -->
+
+      <!-- ── VIEW: TREES ───────────────────────────────────── -->
+      <div id="view-trees" class="view">
+        <div class="sec-header">
+          <div><div class="sec-title">Tree Visualizer</div><div class="sec-sub">Red-Black, B-Tree, 2-3 Tree, KD-Tree — step-by-step construction</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="saveSession()">💾 Save</button>
+        </div>
+        <div class="three-col-sim">
+          <!-- Left -->
+          <div class="sim-panel">
+            <div>
+              <div class="sim-label">Tree Type</div>
+              <select class="styled-select" id="tree-sel" onchange="onTreeChange()">
+                <option>Red-Black Tree</option><option>B-Tree</option><option>2-3 Tree</option><option>KD-Tree</option>
+              </select>
+            </div>
+            <div id="btree-ord-wrap" style="display:none">
+              <div class="sim-label">B-Tree Order (t)</div>
+              <select class="styled-select" id="btree-ord"><option value="2">t=2 (2-3-4)</option><option value="3">t=3</option><option value="4">t=4</option></select>
+            </div>
+            <div>
+              <div class="sim-label">Size</div>
+              <select class="styled-select" id="tree-sz"><option>5</option><option selected>7</option><option>9</option><option>12</option></select>
+            </div>
+            <div>
+              <div class="sim-label">Custom Input</div>
+              <input class="arr-input" id="tree-custom" type="text" placeholder="Values: 10,20,30 or Points: x,y;x,y">
+            </div>
+            <div>
+              <div class="sim-label">Speed</div>
+              <div class="speed-row">
+                <input type="range" class="speed-slider" id="t-spd" min="1" max="10" value="5" oninput="document.getElementById('t-spd-val').textContent=this.value">
+                <span class="speed-val" id="t-spd-val">5</span>
+              </div>
+            </div>
+            <div class="sim-btn-row">
+              <button class="sim-btn setup" onclick="treeSetup()">⚙ Setup</button>
+              <button class="sim-btn reset" onclick="treeReset()">↺ Reset</button>
+            </div>
+            <div class="sim-btn-row">
+              <button class="sim-btn next" id="t-next" onclick="treeNext()" disabled>Next ›</button>
+              <button class="sim-btn auto" id="t-auto" onclick="treeAuto()" disabled>▶ Auto</button>
+            </div>
+            <div class="divider" style="margin:4px 0"></div>
+            <div class="sim-label">Complexity</div>
+            <table class="cx-table"><tbody id="tree-cx"></tbody></table>
+          </div>
+          <!-- Center -->
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="sim-prog-wrap" style="flex:1"><div class="sim-prog-fill" id="t-prog" style="width:0%"></div></div>
+              <span style="font-size:11px;color:var(--text-3);white-space:nowrap" id="t-prog-txt">0 / 0</span>
+            </div>
+            <div class="arr-viz">
+              <div class="arr-viz-title"><span id="t-viz-title">Tree Visualization</span><span style="font-size:11px;padding:3px 9px;background:var(--bg);border-radius:6px;color:var(--text-3)" id="t-status">Idle</span></div>
+              <div class="tree-canvas-box" id="tree-canvas"><div class="tree-empty">Press Setup to build a tree</div></div>
+              <div id="kd-plot-wrap"><div id="kd-plot" style="width:100%;height:100%"></div></div>
+              <div class="sim-stats-row" style="margin-top:8px">
+                <div class="sim-stat"><div class="sim-stat-val" id="t-step-n">0</div><div class="sim-stat-lbl">Step</div></div>
+                <div class="sim-stat"><div class="sim-stat-val" id="t-total-n">—</div><div class="sim-stat-lbl">Total</div></div>
+              </div>
+              <div class="step-msg" id="t-msg">Ready — press Setup</div>
+            </div>
+            <div class="card card-pad">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:10px">Pseudocode — <span id="t-pseudo-name">Red-Black Tree</span></div>
+              <div class="pseudo-block" id="tree-pseudo"></div>
+            </div>
+          </div>
+          <!-- Right -->
+          <div class="right-panel">
+            <div class="card card-pad">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:10px">Legend</div>
+              <div class="legend-grid">
+                <div class="legend-row"><div class="legend-sw" style="background:#ef5350;border-color:#b71c1c"></div>RED node (RB)</div>
+                <div class="legend-row"><div class="legend-sw" style="background:#37474f;border-color:#263238"></div>BLACK node (RB)</div>
+                <div class="legend-row"><div class="legend-sw" style="background:#e3f2fd;border-color:#1565c0"></div>B-Tree / 2-3 node</div>
+                <div class="legend-row"><div class="legend-sw" style="background:#3f51b5;border-color:#283593"></div>KD X-axis split</div>
+                <div class="legend-row"><div class="legend-sw" style="background:#e91e63;border-color:#880e4f"></div>KD Y-axis split</div>
+                <div class="legend-row"><div class="legend-sw" style="background:#f9a825;border-color:#e65100"></div>Highlighted node</div>
+              </div>
+            </div>
+            <div class="card card-pad">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:10px">Observations</div>
+              <ul class="obs-list" id="tree-obs"></ul>
+            </div>
+            <div class="card card-pad">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:8px" id="tree-exp-title">Explanation</div>
+              <div style="font-size:12.5px;color:var(--text-2);line-height:1.65" id="tree-exp-how"></div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /view-trees -->
+
+      <!-- ── VIEW: COMPARE ─────────────────────────────────── -->
+      <div id="view-compare" class="view">
+        <div class="sec-header">
+          <div><div class="sec-title">Algorithm Comparison</div><div class="sec-sub">Run two algorithms side by side on the same array</div></div>
+        </div>
+        <div class="card card-pad" style="margin-bottom:14px">
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+            <select class="styled-select" id="cmp-a" style="width:175px" onchange="resetCompare()">
+              <option>Bubble Sort</option><option>Selection Sort</option><option>Insertion Sort</option><option>Merge Sort</option><option>Quick Sort</option><option>Heap Sort</option><option>Shell Sort</option>
+            </select>
+            <span style="font-size:16px;color:var(--text-3);font-weight:700">vs</span>
+            <select class="styled-select" id="cmp-b" style="width:175px" onchange="resetCompare()">
+              <option>Bubble Sort</option><option>Selection Sort</option><option>Insertion Sort</option><option>Merge Sort</option><option selected>Quick Sort</option><option>Heap Sort</option><option>Shell Sort</option>
+            </select>
+            <select class="styled-select" id="cmp-sz" style="width:110px" onchange="resetCompare()">
+              <option>6</option><option selected>10</option><option>15</option><option>20</option>
+            </select>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:11.5px;font-weight:600;color:var(--text-2)">Speed:</span>
+              <input type="range" style="width:80px;accent-color:var(--primary)" id="cmp-spd" min="1" max="10" value="7">
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="setupCompare()">Setup</button>
+            <button class="btn btn-green btn-sm" id="cmp-start" onclick="startCompare()" disabled>▶ Run Both</button>
+            <button class="btn btn-ghost btn-sm" onclick="resetCompare()">Reset</button>
+          </div>
+        </div>
+        <div id="cmp-winner" style="display:none;margin-bottom:12px;padding:14px 20px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--purple));color:#fff;font-weight:700;font-size:15px"></div>
+        <div class="compare-grid">
+          <div class="cmp-card">
+            <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:10px" id="cmp-na">Algorithm A</div>
+            <div class="arr-display" style="margin-bottom:10px"><div class="arr-boxes-wrap"><div class="arr-boxes" id="cmp-boxes-a"></div><div class="arr-idx-row" id="cmp-idx-a"></div><div class="arr-ptr-row" id="cmp-ptrs-a"></div></div></div>
+            <div class="sim-stats-row">
+              <div class="sim-stat"><div class="sim-stat-val" id="cmp-ca">0</div><div class="sim-stat-lbl">Comps</div></div>
+              <div class="sim-stat"><div class="sim-stat-val" id="cmp-sa">0</div><div class="sim-stat-lbl">Swaps</div></div>
+              <div class="sim-stat"><div class="sim-stat-val" id="cmp-ta">0.00s</div><div class="sim-stat-lbl">Time</div></div>
+            </div>
+            <div class="sim-prog-wrap" style="margin-top:8px"><div class="sim-prog-fill" id="cmp-pa" style="width:0%"></div></div>
+          </div>
+          <div class="cmp-card">
+            <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:10px" id="cmp-nb">Algorithm B</div>
+            <div class="arr-display" style="margin-bottom:10px"><div class="arr-boxes-wrap"><div class="arr-boxes" id="cmp-boxes-b"></div><div class="arr-idx-row" id="cmp-idx-b"></div><div class="arr-ptr-row" id="cmp-ptrs-b"></div></div></div>
+            <div class="sim-stats-row">
+              <div class="sim-stat"><div class="sim-stat-val" id="cmp-cb">0</div><div class="sim-stat-lbl">Comps</div></div>
+              <div class="sim-stat"><div class="sim-stat-val" id="cmp-sb">0</div><div class="sim-stat-lbl">Swaps</div></div>
+              <div class="sim-stat"><div class="sim-stat-val" id="cmp-tb">0.00s</div><div class="sim-stat-lbl">Time</div></div>
+            </div>
+            <div class="sim-prog-wrap" style="margin-top:8px"><div class="sim-prog-fill" id="cmp-pb" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="card card-pad" id="cmp-result" style="margin-top:14px;display:none">
+          <div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:10px">Results</div>
+          <table class="cx-table" id="cmp-result-tbl"></table>
+        </div>
+      </div><!-- /view-compare -->
+
+      <!-- ── VIEW: QUIZ ────────────────────────────────────── -->
+      <div id="view-quiz" class="view">
+        <div class="sec-header">
+          <div><div class="sec-title">Practice Quiz</div><div class="sec-sub">5 unique questions per round — different questions each round</div></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div class="sim-stat" style="padding:8px 14px"><div class="sim-stat-val" id="q-score">0</div><div class="sim-stat-lbl">Score</div></div>
+            <div class="sim-stat" style="padding:8px 14px"><div class="sim-stat-val" id="q-acc">0%</div><div class="sim-stat-lbl">Accuracy</div></div>
+            <button class="btn btn-ghost btn-sm" onclick="resetQuiz()">Reset</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:16px">
+          <button class="btn btn-primary btn-sm" id="qs-sort" onclick="switchQSection('sorting',this)">Sorting</button>
+          <button class="btn btn-ghost btn-sm"  id="qs-tree" onclick="switchQSection('trees',this)">Trees</button>
+        </div>
+        <div class="quiz-layout">
+          <div class="quiz-sidebar">
+            <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:10px">Topics</div>
+            <div id="q-algo-list"></div>
+          </div>
+          <div id="q-container"></div>
+        </div>
+      </div><!-- /view-quiz -->
+
+      <!-- ── VIEW: PROGRESS ────────────────────────────────── -->
+      <div id="view-progress" class="view">
+        <div class="sec-header"><div><div class="sec-title">My Progress</div><div class="sec-sub">Detailed analytics of your learning journey</div></div></div>
+        <!-- Profile -->
+        <div class="profile-card">
+          <div class="profile-avatar" id="p-av" style="background:var(--accent)">?</div>
+          <div style="flex:1">
+            <div class="profile-name" id="p-nm">Guest</div>
+            <div class="profile-uname" id="p-un">Not logged in</div>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+              <span class="chip chip-blue" id="p-lvl-tag">Level 1</span>
+              <span style="font-size:13px;font-weight:700;color:var(--accent)" id="p-xp-val">0 XP</span>
+            </div>
+            <div class="xp-bar-wrap" style="max-width:340px;margin-top:10px">
+              <div class="xp-bar-labels"><span id="xp-cur">0 XP</span><span id="xp-nxt">100 XP to next level</span></div>
+              <div class="xp-bar"><div class="xp-bar-fill" id="xp-fill" style="width:0%"></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Stats -->
+        <div class="stat-grid-4" style="margin-bottom:16px">
+          <div class="stat-card"><div class="stat-card-icon">🔄</div><div class="stat-card-val" id="pr-c">0</div><div class="stat-card-label">Comparisons</div></div>
+          <div class="stat-card"><div class="stat-card-icon">↔️</div><div class="stat-card-val" id="pr-s">0</div><div class="stat-card-label">Swaps</div></div>
+          <div class="stat-card"><div class="stat-card-icon">🧠</div><div class="stat-card-val" id="pr-q">0</div><div class="stat-card-label">Questions Answered</div></div>
+          <div class="stat-card"><div class="stat-card-icon">🏅</div><div class="stat-card-val" id="pr-b">0</div><div class="stat-card-label">Badges Earned</div></div>
+        </div>
+        <div class="two-col" style="margin-bottom:16px">
+          <div class="card card-pad">
+            <div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:12px">Weekly Activity</div>
+            <div class="week-chart" id="wk-chart"><div style="color:var(--text-3);font-size:13px">No data yet</div></div>
+          </div>
+          <div class="card card-pad">
+            <div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:12px">Quiz Performance</div>
+            <div id="pr-quiz-perf"><div style="color:var(--text-3);font-size:13px">No quiz data yet</div></div>
+          </div>
+        </div>
+        <div class="card card-pad" style="margin-bottom:16px">
+          <div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:12px">All Badges <span id="pr-b-count" style="font-size:11px;font-weight:400;color:var(--text-3)">0 / 10 earned</span></div>
+          <div class="badge-wrap" id="pr-badges"><div style="color:var(--text-3);font-size:13px">Complete activities to earn badges!</div></div>
+        </div>
+        <div class="card card-pad">
+          <div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:12px">Recent Activity</div>
+          <div class="act-list" id="pr-activity"><div style="color:var(--text-3);font-size:13px">No activity yet</div></div>
+        </div>
+      </div><!-- /view-progress -->
+
+    </div><!-- /views-wrap -->
+  </div><!-- /main-wrap -->
+</div><!-- /page-app -->
+
+</div><!-- /app -->
+<div class="toast-wrap" id="toasts"></div>
+
+<!-- ALL SCRIPTS — self-contained -->
+<script src="src/data/complexities.js"></script>
+<script src="src/data/explanations.js"></script>
+<script src="src/data/codeSnippets.js"></script>
+<script src="src/data/quizData.js"></script>
+<script src="src/data/pseudocode.js"></script>
+<script src="src/data/treeData.js"></script>
+<script src="src/algorithms/bubbleSort.js"></script>
+<script src="src/algorithms/selectionSort.js"></script>
+<script src="src/algorithms/insertionSort.js"></script>
+<script src="src/algorithms/mergeSort.js"></script>
+<script src="src/algorithms/quickSort.js"></script>
+<script src="src/algorithms/heapSort.js"></script>
+<script src="src/algorithms/shellSort.js"></script>
+<script src="src/algorithms/index.js"></script>
+<script src="src/trees/redBlackTree.js"></script>
+<script src="src/trees/bTree.js"></script>
+<script src="src/trees/twoThreeTree.js"></script>
+<script src="src/trees/kdTree.js"></script>
+<script src="src/trees/treeRenderer.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>
