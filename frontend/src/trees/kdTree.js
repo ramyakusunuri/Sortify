@@ -1,5 +1,6 @@
 // ── KD-TREE ───────────────────────────────────────────────────
 // K-Dimensional tree for 2D points (k=2)
+// FIXED: Steps now show the tree growing progressively node-by-node
 
 class KDNode {
   constructor(point, depth=0) {
@@ -14,57 +15,80 @@ class KDNode {
 class KDTree {
   constructor() { this.root = null; this.steps = []; }
 
-  _snap(msg, highlight=[]) {
-    this.steps.push({ tree: this._serialize(this.root), msg, highlight:[...highlight], type:'kd' });
-  }
-
-  buildFromPoints(points) {
-    this._snap(`Building KD-Tree from ${points.length} 2D points`);
-    this.root = this._build([...points], 0);
-    this._snap(`KD-Tree construction complete!`);
-  }
-
-  _build(pts, depth) {
-    if (!pts.length) return null;
-    const axis = depth % 2;
-    pts.sort((a,b) => a[axis] - b[axis]);
-    const mid = Math.floor(pts.length / 2);
-    const node = new KDNode(pts[mid], depth);
-    const axisName = axis===0 ? 'X' : 'Y';
-    this._snap(
-      `Depth ${depth}: Split on ${axisName}-axis. Median = (${pts[mid][0]}, ${pts[mid][1]})`,
-      [pts[mid]]
-    );
-    node.left  = this._build(pts.slice(0, mid), depth+1);
-    node.right = this._build(pts.slice(mid+1),  depth+1);
-    return node;
-  }
-
-  search(target) {
-    this.steps = [];
-    this._snap(`Nearest neighbor search for (${target[0]}, ${target[1]})`,[target]);
-    let best = null, bestDist = Infinity;
-    const search = (node, depth) => {
-      if (!node) return;
-      const d = Math.hypot(node.point[0]-target[0], node.point[1]-target[1]);
-      this._snap(`Visiting (${node.point[0]},${node.point[1]}), dist=${d.toFixed(2)}`,[node.point]);
-      if (d < bestDist) { bestDist=d; best=node.point; this._snap(`New best: (${best[0]},${best[1]}) dist=${d.toFixed(2)}`,[node.point]); }
-      const axis = depth%2;
-      const diff = target[axis] - node.point[axis];
-      const near  = diff<=0 ? node.left  : node.right;
-      const far   = diff<=0 ? node.right : node.left;
-      search(near, depth+1);
-      if (Math.abs(diff) < bestDist) { this._snap(`Checking far subtree (boundary ${Math.abs(diff).toFixed(2)} < ${bestDist.toFixed(2)})`); search(far, depth+1); }
-    };
-    search(this.root, 0);
-    this._snap(`Nearest neighbor found: (${best[0]}, ${best[1]}) at distance ${bestDist.toFixed(2)}`,[best]);
-    return best;
-  }
-
   _serialize(node) {
     if (!node) return null;
     return { id:node.id, point:node.point, depth:node.depth, axis:node.axis,
              left:this._serialize(node.left), right:this._serialize(node.right) };
+  }
+
+  // Build entire tree first, then replay with growing snapshots
+  buildFromPoints(points) {
+    // Step 1: record entry snap with no tree yet (just a label)
+    this.steps.push({ tree: null, msg: `Building KD-Tree from ${points.length} 2D points`, highlight: [] });
+
+    // Step 2: build the full tree silently, collecting insertion order
+    const insertionOrder = [];   // [{node, msg, highlight}, ...]
+    this.root = this._buildCollect([...points], 0, insertionOrder);
+
+    // Step 3: replay — for each inserted node, serialize the PARTIAL tree up to that point
+    // We do this by rebuilding in insertion order and snapping after each node is added
+    const tempTree = new KDTree();
+    for (let i = 0; i < insertionOrder.length; i++) {
+      const { pts, depth, msg, highlight } = insertionOrder[i];
+      // Insert this node into tempTree
+      tempTree._insertNodeAt(pts, depth);
+      this.steps.push({
+        tree: tempTree._serialize(tempTree.root),
+        msg,
+        highlight
+      });
+    }
+
+    // Final step: full tree complete
+    this.steps.push({
+      tree: this._serialize(this.root),
+      msg: `KD-Tree construction complete! ${points.length} nodes inserted.`,
+      highlight: []
+    });
+  }
+
+  // Build tree and collect insertion order (pts=median point, depth=depth at that node)
+  _buildCollect(pts, depth, order) {
+    if (!pts.length) return null;
+    const axis = depth % 2;
+    pts.sort((a,b) => a[axis] - b[axis]);
+    const mid = Math.floor(pts.length / 2);
+    const axisName = axis===0 ? 'X' : 'Y';
+    const node = new KDNode(pts[mid], depth);
+
+    // Record this node insertion
+    order.push({
+      pts: pts[mid],
+      depth,
+      msg: `Depth ${depth}: Split on ${axisName}-axis. Node (${pts[mid][0]}, ${pts[mid][1]}) placed as median.`,
+      highlight: [pts[mid]]
+    });
+
+    node.left  = this._buildCollect(pts.slice(0, mid), depth+1, order);
+    node.right = this._buildCollect(pts.slice(mid+1),  depth+1, order);
+    return node;
+  }
+
+  // Insert a single point into the temp tree (used for progressive snapshot replay)
+  _insertNodeAt(point, depth) {
+    const node = new KDNode(point, depth);
+    if (!this.root) { this.root = node; return; }
+    let cur = this.root;
+    while (true) {
+      const axis = cur.depth % 2;
+      if (point[axis] < cur.point[axis]) {
+        if (!cur.left) { cur.left = node; break; }
+        cur = cur.left;
+      } else {
+        if (!cur.right) { cur.right = node; break; }
+        cur = cur.right;
+      }
+    }
   }
 
   getSteps() { return this.steps; }
@@ -73,12 +97,5 @@ class KDTree {
 function generateKDTreeSteps(points) {
   const t = new KDTree();
   t.buildFromPoints(points);
-  return t.getSteps();
-}
-
-function generateKDSearchSteps(points, target) {
-  const t = new KDTree();
-  t.buildFromPoints(points);
-  t.search(target);
   return t.getSteps();
 }

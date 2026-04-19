@@ -639,3 +639,18 @@ input,select { font-family:inherit; outline:none; border:none; }
 
 /* KD point plot */
 #kd-plot-wrap { display:none; width:100%; height:180px; border-radius:8px; overflow:hidden; border:1px solid var(--border); }
+
+/* ── GENERATED VALUES BOX ──────────────────────────────────── */
+.gen-values-box {
+  margin-top:6px; padding:6px 10px;
+  background:var(--primary-lt); border:1px solid var(--primary);
+  border-radius:7px; font-size:11.5px; line-height:1.5;
+  word-break:break-all;
+}
+.gen-values-label {
+  font-weight:700; color:var(--primary); margin-right:5px;
+  font-size:10.5px; text-transform:uppercase; letter-spacing:.05em;
+}
+.gen-values-text {
+  color:var(--text); font-family:'Fira Code','Consolas',monospace; font-size:11px;
+}

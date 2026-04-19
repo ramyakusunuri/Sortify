@@ -470,6 +470,9 @@ function doSetup(){
   } else {
     const n=+($id('size-sel')||{}).value||8;
     _arr=Array.from({length:n},()=>Math.floor(Math.random()*900)+100);
+    // Show generated values in the display box below the input
+    const sgb=$id('sort-gen-box'), sgv=$id('sort-gen-values');
+    if(sgb&&sgv){ sgv.textContent=_arr.join(', '); sgb.style.display=''; }
   }
   _steps=generateSteps(name,[..._arr]);
   _stepIdx=0;_comps=0;_swaps=0;_sorted=new Set();_isSetup=true;
@@ -492,6 +495,9 @@ function doReset(){
   _stopAuto();_isSetup=false;_steps=[];_stepIdx=0;_comps=0;_swaps=0;_sorted=new Set();
   const n=+($id('size-sel')||{}).value||8;
   _arr=Array.from({length:n},()=>Math.floor(Math.random()*900)+100);
+  // Show new random values in the gen box
+  const rsgb=$id('sort-gen-box'), rsgv=$id('sort-gen-values');
+  if(rsgb&&rsgv){ rsgv.textContent=_arr.join(', '); rsgb.style.display=''; }
   drawArr(_arr,{},{},new Set());
   ['s-comps','s-swaps','s-step','m-c','m-s'].forEach(id=>setText(id,'0'));
   setText('s-total','—');setText('prog-txt','0 / 0');
@@ -678,6 +684,9 @@ function treeSetup(){
         const x=Math.floor(Math.random()*90)+5,y=Math.floor(Math.random()*90)+5;
         if(!used.has(x+','+y)){used.add(x+','+y);_kdPts.push([x,y]);}
       }
+      // Show generated points in the display box
+      const ktgb=$id('tree-gen-box'), ktgv=$id('tree-gen-values');
+      if(ktgb&&ktgv){ ktgv.textContent=_kdPts.map(p=>'('+p[0]+','+p[1]+')').join('  '); ktgb.style.display=''; }
     }
     _tSteps=generateKDTreeSteps(_kdPts);
     renderKDPoints('kd-plot',_kdPts,[]);
@@ -693,6 +702,9 @@ function treeSetup(){
       const cnt=+($id('tree-sz')||{}).value||7;
       const used=new Set(); vals=[];
       while(vals.length<cnt){const v=Math.floor(Math.random()*90)+10;if(!used.has(v)){used.add(v);vals.push(v);}}
+      // Show generated values in the display box
+      const ttgb=$id('tree-gen-box'), ttgv=$id('tree-gen-values');
+      if(ttgb&&ttgv){ ttgv.textContent=vals.join(', '); ttgb.style.display=''; }
     }
     if(t==='Red-Black Tree') _tSteps=generateRBSteps(vals);
     else if(t==='B-Tree') _tSteps=generateBTreeSteps(vals,+($id('btree-ord')||{value:2}).value||2);
@@ -744,6 +756,8 @@ function treeReset(){
   $id('t-prog').style.width='0%'; setText('t-prog-txt','0 / 0'); setText('t-step-n','0'); setText('t-total-n','—');
   $id('t-next').disabled=true; $id('t-auto').disabled=true;
   const kw=$id('kd-plot-wrap'); if(kw) kw.style.display='none';
+  // Hide gen box on reset
+  const trgb=$id('tree-gen-box'); if(trgb) trgb.style.display='none';
 }
 
 function treeRenderStep(idx){
@@ -759,7 +773,13 @@ function treeRenderStep(idx){
     li.innerHTML=`<span class="obs-step">#${idx+1}</span><span class="obs-text">${esc(step.msg||'')}</span>`;
     list.prepend(li); while(list.children.length>50) list.removeChild(list.lastChild);
   }
-  if(t==='KD-Tree'&&step.highlight) renderKDPoints('kd-plot',_kdPts,step.highlight);
+  // KD-Tree: ALWAYS update point plot on every step (Next click OR Auto Run)
+  // Do NOT gate on step.highlight — first step and many steps have empty highlight
+  if(t==='KD-Tree'){
+    const kdWrap=$id('kd-plot-wrap');
+    if(kdWrap&&kdWrap.style.display==='none') kdWrap.style.display='';
+    renderKDPoints('kd-plot',_kdPts,step.highlight||[]);
+  }
 }
 
 function renderTreeCx(name){

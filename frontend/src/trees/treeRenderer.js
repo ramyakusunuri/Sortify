@@ -3,9 +3,16 @@
 function renderTree(containerId, treeData, treeType, highlight=[]) {
   const container = document.getElementById(containerId);
   if (!container) return;
-  if (!treeData) { container.innerHTML = '<div class="tree-empty">No tree data. Press Setup.</div>'; return; }
+  // For KD-Tree step 0, treeData is null (intro step) — show waiting message not error
+  if (!treeData) {
+    container.innerHTML = '<div class="tree-empty" style="color:var(--text-2);font-style:italic">' +
+      (treeType === 'kd' ? 'Building tree... first node will appear on next step.' : 'No tree data. Press Setup.') +
+      '</div>';
+    return;
+  }
 
-  const W = container.clientWidth || 800;
+  // Use offsetWidth as fallback for freshly-shown containers
+  const W = container.clientWidth || container.offsetWidth || 800;
   const nodeR = 24;
 
   // Calculate layout
@@ -174,7 +181,14 @@ function renderKDTree(container, node, highlight, W) {
 function renderKDPoints(containerId, points, highlight=[]) {
   const container = document.getElementById(containerId);
   if (!container || !points.length) return;
-  const W = container.clientWidth || 400, H = 280;
+  // Ensure parent wrapper is visible — check both inline style and computed style
+  const wrapper = container.parentElement;
+  if(wrapper){
+    const cs = getComputedStyle(wrapper);
+    if(cs.display === 'none' || wrapper.style.display === 'none') wrapper.style.display = '';
+  }
+  // Use offsetWidth as fallback — works even on freshly-shown containers
+  const W = container.clientWidth || container.offsetWidth || 500, H = 240;
   const pad = 30;
   const xs = points.map(p=>p[0]), ys = points.map(p=>p[1]);
   const minX=Math.min(...xs), maxX=Math.max(...xs);
